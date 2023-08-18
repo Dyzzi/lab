@@ -1,0 +1,4 @@
+/.env
+/.vscode
+/SUPERCON.session.sql
+/node_modules
