@@ -2,7 +2,7 @@ const express = require ("express")
 const app = express()
 const connection = require("../DB/db")
 const mysql=require ("mysql")
-
+app.use(express.json())
 //nodemon for init
 //global middleware goes at the top 
 //global auth goes here

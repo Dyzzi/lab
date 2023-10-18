@@ -28,13 +28,12 @@ router.get('/',(req, res)=>{
        connection.end()
        res.send(results)
         })
-      
     })
 
 
 
 router.delete('/nuke',(req,res)=>{
-    let TABLE_NAME=req.TABLE_NAME;
+    let TABLE_NAME=req.params.TABLE_NAME;
     connection.query(`DROP TABLE ${TABLE_NAME}`, function(error){
         if (error) throw error;
         connection.end()
@@ -50,15 +49,30 @@ router.post('/touch',(req,res)=>{
 })
 
 // dynamic routes GO LAST
-// '/:' signifies a dynamic parameter, here being 'id'
-router.route('/:id')
-    .get((req, res,)=>{ 
-        
-    res.status(200).json({
-        "id":`${req.params.id}`
-        })
-    })
 
+// '/:' signifies a dynamic parameter, here being 'id'
+
+//THIS ACTUALLY WORKS 
+router.get('/:TABLE_NAME', (req, res)=>{
+
+        connection.query(`SELECT * FROM ${req.params.TABLE_NAME}`, function (error,results, fields) {
+            if (error) throw error;
+            console.log(results)    
+                res.status(200).json(
+                    results
+                )
+                ;
+                connection.end()
+        })
+})
+
+router.delete('/nuke/:TABLE_NAME',(req,res)=>{
+    connection.query(`DROP TABLE ${req.params.TABLE_NAME}`, function(error){
+        if (error) throw error;
+        connection.end()
+        res.send("nuked");
+    });
+})
 
  //middleware learn about middleware
 
