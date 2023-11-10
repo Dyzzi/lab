@@ -1,14 +1,15 @@
 let request={
     "body":{
-    "ip_address": "48.69.96.85",
-    "created": "2023-03-30 12:15:53",
-    "profile_accent": "#c4baac",
-    "first_name": "Bartholomeo",
-    "last_name": "Appleseed",
-    "gender": "Male",
-    "email": "baverall0@salon.com",
-    "job_title": "Director",
-    "banned": false}
+        "ip_address": "48.69.96.85",
+        "created": "2023-03-30 12:15:53",
+        "profile_accent": "#c4baac",
+        "first_name": "Bartholomeo",
+        "last_name": "Appleseed",
+        "gender": "Male",
+        "email": "baverall0@salon.com",
+        "job_title": "Director",
+        "banned": false
+    }
 }
 
 function autoParse(req){
@@ -22,13 +23,9 @@ function autoParse(req){
     }
     console.log(data)
     return(data)
-  
-    
-   
 }
 
 // autoParse(request)
-
 
 function autoSQL(method,table,req){
     console.log(method)
@@ -54,7 +51,7 @@ function autoSQL(method,table,req){
         ${data.values}
     )`
 
-    console.log(query)
+
     return(query)
   
     

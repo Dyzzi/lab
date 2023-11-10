@@ -2,92 +2,53 @@
 const express = require("express")
 const connection = require("../../DB/db")
 const mysql=require ("mysql")
-
+const autoSQL= require("../utils/helpers.js")
 const router = express.Router()
-
 
 //global middleware goes at the top 
 
-
-
 //AUTH GOES HERE
 
-const table="MOCK_DATA"
-//GET ALL
-router.get("/",(req, res)=>{
-    connection.query(`SELECT * FROM ${table}`, function (error, results, fields) {
-        if (error) throw error;
-    console.log(results)
-       connection.end()
-       res.send(results)
+const table="users"
+//DEFAULT ROUTE
+router.route("/")
+    .get((req, res)=>{
+        connection.query(`SELECT * FROM ${table}`, function (error, results, fields) {
+            if (error) throw error;
+        console.log(results)
+        connection.end()
+        res.send(results)
         });  
-})
-.post("/",(req, res) => {
-//     connection.query(
-//     `INSERT INTO ${table}(
-//     "ip_address",
-//     "created",
-//     "profile_accent",
-//     "first_name",
-//     "last_name",
-//     "gender",
-//     "email",
-//     "job_title",
-//     "banned")
-// VALUES(
-//     "${req.body.ip_address}",
-//     "${req.body.created}",
-//     "${req.body.profile_accent}",
-//     "${req.body.first_name}",
-//     "${req.body.last_name}",
-//     "${req.body.gender}",
-//     "${req.body.job_title}",
-//     " ${req.body.banned}"
+    })
 
-// )`);
-// connection.end();
+    .post((req, res,) => {
+        let data=autoSQL("INSERT INTO", table, req)
+    connection.query(data, function(error, data){
+            if (error) throw error;
 
-console.log(    `INSERT INTO ${table}(
-    "ip_address",
-    "created",
-    "profile_accent",
-    "first_name",
-    "last_name",
-    "gender",
-    "email",
-    "job_title",
-    "banned")
-VALUES(
-    ${req.body.ip_address},
-    ${req.body.created},
-    ${req.body.profile_accent},
-    ${req.body.first_name},
-    ${req.body.last_name},
-    ${req.body.gender},
-    ${req.body.job_title},
-    ${req.body.banned})`
-)
-res.send("done")
-})
-
-
-
+            connection.end()
+        res.send(data)})
+    })
+        
 
     
+
 // dynamic routes GO LAST
 // "/:" signifies a dynamic parameter, here being "id"
 router.route("/:id")
-    .get((req, res,)=>{
-        
-    res.status(200).json({
-        "id":`${req.params.id}`
-        })
+    .get((req, res)=>{
+        connection.query(`SELECT id, display_name, handle, bio, gender FROM ${table} WHERE id = ${req.params.id}`, function (error, results, fields) {
+            if (error) throw error;
+        console.log(results)
+       
+        res.send(results)
+        });  
+   
     })
+
     .delete((req,res)=>{
-        connection.query(`DELETE FROM ${table} WHERE id = `)
+        connection.query(`DELETE FROM ${table} WHERE id = ${req.params.id}`)
     })
-
-
 
 router.param("id", (req,res,next,err)=>{
     const isInteger= /^\d+$/.test(req.params.id);

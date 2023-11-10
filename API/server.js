@@ -14,11 +14,6 @@ app.get('/', (req, res)=>{
     res.status(200).json({"status":"online"})
 })
 
-
-
-// app.post
-// app.patch
-// app.delete
  
 const userRouter=require('./routes/users')
 

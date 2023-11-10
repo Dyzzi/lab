@@ -1,4 +1,4 @@
-const { port, host,secret, user,dialect, password, db } = require('../config');
+const { port, host, secret, user, dialect, password, db } = require('../config');
 const crypto=require('crypto')
 const mysql = require('mysql');
 console.log(`${host}.${port}`);
@@ -19,7 +19,7 @@ var connection = mysql.createConnection(url);
 
 connection.connect(function(err) {
     if(err){
-      throw(err)
+      throw(err) 
     }
     else 
       console.log(`Connected to URL: [${url}]`);
