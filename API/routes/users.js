@@ -3,6 +3,7 @@ const express = require("express")
 const connection = require("../../DB/db")
 const mysql=require ("mysql")
 const autoSQL= require("../utils/helpers.js")
+const { ipLogger } = require("../utils/middleware.js")
 const router = express.Router()
 
 //global middleware goes at the top 
@@ -13,20 +14,18 @@ const table="users"
 //DEFAULT ROUTE
 router.route("/")
     .get((req, res)=>{
-        connection.query(`SELECT * FROM ${table}`, function (error, results, fields) {
-            if (error) throw error;
-        console.log(results)
-        connection.end()
+        connection.query(`SELECT * FROM ${table}`, function (err, results, next, fields) {
+            if (err) throw err;
         res.send(results)
-        });  
+        });
+        ipLogger()  
     })
 
     .post((req, res,) => {
         let data=autoSQL("INSERT INTO", table, req)
-    connection.query(data, function(error, data){
+        connection.query(data, function(error, data){
             if (error) throw error;
 
-            connection.end()
         res.send(data)})
     })
         
@@ -36,18 +35,21 @@ router.route("/")
 // dynamic routes GO LAST
 // "/:" signifies a dynamic parameter, here being "id"
 router.route("/:id")
-    .get((req, res)=>{
+    .get((req, res,next)=>{
         connection.query(`SELECT id, display_name, handle, bio, gender FROM ${table} WHERE id = ${req.params.id}`, function (error, results, fields) {
             if (error) throw error;
         console.log(results)
        
         res.send(results)
         });  
-   
+        
     })
 
     .delete((req,res)=>{
-        connection.query(`DELETE FROM ${table} WHERE id = ${req.params.id}`)
+        connection.query(`DELETE FROM ${table} WHERE id = ${req.params.id}`,
+        function (err, res){
+            if (err) throw err;
+        })
     })
 
 router.param("id", (req,res,next,err)=>{

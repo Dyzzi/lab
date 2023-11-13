@@ -1,3 +1,4 @@
+//convert/parse-out/render data
 //json formatting helper function 
 function autoSQL(method,table,req){
     let data={
